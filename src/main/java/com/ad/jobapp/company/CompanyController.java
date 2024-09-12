@@ -14,16 +14,26 @@ public class CompanyController {
         this.companyService = companyService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<Company>> getAllCompanies() {
-        return new ResponseEntity<>(companyService.getAllCompanies(), HttpStatus.OK);
-    }
-
     @PostMapping
     public ResponseEntity<String> addCompany(@RequestBody Company company) {
         companyService.createCompany(company);
         return new ResponseEntity<>("Company created", HttpStatus.CREATED);
     }
+
+    @GetMapping
+    public ResponseEntity<List<Company>> getAllCompanies() {
+        return new ResponseEntity<>(companyService.getAllCompanies(), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Company> getCompanyById(@PathVariable Long id) {
+        Company company = companyService.getCompanyById(id);
+        if (company == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(company, HttpStatus.OK);
+    }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<String> updateCompany(@RequestBody Company updatedCompany, @PathVariable Long id) {
